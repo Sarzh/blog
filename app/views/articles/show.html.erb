@@ -1,0 +1,44 @@
+<div calss='row'>
+
+	<div class="col-xs-12">
+
+
+		<div class="panel panel-default">
+
+			<div class="panel-heading">
+				<h3 class="panel-title"><%= @article.title %></h3>
+			</div>
+
+			<div class="panel-body">
+				<%= simple_format(@article.text) %><br/><br/>
+
+		        <div class="small">
+		          <i>By <%= @article.author %> at <%= @article.created_at %></i>
+		          <%= link_to "edit", edit_article_path(@article) if can? :edit, @article %> 
+		          <%= link_to "delete", article_path(@article), method: :delete, data: { confirm: 'Are you sure?'} if can? :destroy, @article %>
+		        </div>
+
+			</div>
+
+		</div>
+
+		<% @article.comments.each do |com| %>
+		<%= simple_format(com.body) %>
+		<i><small>By <%= com.author %> at <%= com.created_at %></small></i>
+		<hr>
+		<% end %>
+
+		<%= form_for [@article, @article.comments.build], role: :form do |f| %>
+
+			<div class="form-group">
+				<%= f.label :Comment %><br />
+				<%= f.text_area :body, class: 'form-control' %>
+			</div>
+
+			<%= f.submit 'Comment', class: "btn btn-default" %>
+
+		<% end %>
+
+	</div>
+
+</div>
